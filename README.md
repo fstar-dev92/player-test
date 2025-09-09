@@ -1,142 +1,211 @@
-# Showfer Player Tester
+# 🌩️ Stormcloud Video Player Test Environment
 
-A testing application for the `showfer-player` npm module. This project provides a simple interface to test various configurations and features of the video player component.
+A comprehensive test environment for the `stormcloud-video-player` npm package with a modern React-based UI for testing various configurations and scenarios.
 
 ## Features
 
-- **Interactive Configuration**: Test different player settings through a user-friendly interface
-- **Multiple Video Formats**: Support for HLS, MP4, YouTube, and Twitch streams
-- **Real-time Controls**: Adjust volume, toggle fullscreen, enable/disable controls
-- **Subtitle Support**: Test subtitle functionality with custom .vtt files
-- **Example URLs**: Quick-select buttons for testing different video types
-- **Event Logging**: Console output for player events and debugging
+### 🎯 Player Testing
+- **Multiple Stream Sources**: Pre-configured HLS streams for testing
+- **Custom Stream Input**: Test with your own HLS streams
+- **Real-time Configuration**: Modify player settings on-the-fly
+- **Ad Integration Testing**: Full VAST ad support with customizable schedules
 
-## Setup
+### 🎛️ Configuration Options
+- **Basic Settings**: Autoplay, mute, controls, native HLS support
+- **Ad Schedule Management**: Create, modify, and test complex ad breaks
+- **Late Join Policies**: Test different ad handling strategies
+- **VAST Tag Testing**: Multiple sample VAST tags plus custom input
 
-1. **Install Dependencies**:
+### 📊 Monitoring & Debugging
+- **Event Logging**: Real-time player event monitoring
+- **Configuration Display**: Live view of current player config
+- **Status Indicators**: Visual feedback on player state
+- **Responsive Design**: Works on desktop and mobile devices
 
+## Quick Start
+
+### Prerequisites
+- Node.js 16+ and npm
+- Modern web browser with HLS support
+
+### Installation & Setup
+
+1. **Install dependencies**:
    ```bash
    npm install
    ```
 
-2. **Start Development Server**:
-
+2. **Start the development server**:
    ```bash
    npm start
    ```
 
-   This will start the development server at `http://localhost:3000` and automatically open your browser.
+3. **Open your browser**:
+   The app will automatically open at `https://localhost:3000`
 
-3. **Build for Production**:
-   ```bash
-   npm run build
-   ```
+### Alternative Commands
+- `npm run dev` - Start development server without auto-opening
+- `npm run build` - Build production bundle
 
-## Usage
+## Usage Guide
 
-### Testing the Player
+### 🎬 Testing Basic Playback
 
-1. **Quick Start**: Click on one of the example URL buttons (HLS, MP4, YouTube, Twitch) to load a test video
-2. **Custom Video**: Enter your own video URL in the "Video URL" field
-3. **Configure Settings**: Adjust player type, dimensions, volume, and other settings
-4. **Add Subtitles**: Enter a subtitle URL (.vtt file) to test subtitle functionality
-5. **Monitor Events**: Check the browser console for player events and debugging information
+1. **Select a Stream**: Choose from pre-configured HLS streams or enter a custom URL
+2. **Configure Player**: Toggle autoplay, mute, controls, and native HLS settings
+3. **Start Testing**: The player will reload automatically with new settings
 
-### Available Player Types
+### 📺 Testing Ad Integration
 
-- **HLS**: HTTP Live Streaming (.m3u8 files)
-- **MP4**: Standard MP4 video files
-- **YouTube**: YouTube video URLs
-- **Twitch**: Twitch stream URLs
+1. **Choose VAST Tag**: Select from sample VAST tags or provide your own
+2. **Configure Ad Schedule**:
+   - Set late join policy (play remaining vs skip to content)
+   - Add/remove ad breaks
+   - Configure break timing and duration
+3. **Advanced Settings**: Use the "Show Advanced Settings" to fine-tune ad breaks
 
-### Player Features
+### 🔧 Advanced Testing
 
-The tester allows you to test all showfer-player features:
+#### Ad Schedule Configuration
+- **Start Time**: When the ad break should begin (in seconds)
+- **Duration**: How long the ad break should last
+- **VAST Tag URL**: Specific ad tag for this break
 
-- **Controls**: Toggle player controls on/off
-- **Volume**: Adjust volume from 0-100%
-- **Mute**: Test mute/unmute functionality
-- **Fullscreen**: Test fullscreen mode
-- **Subtitles**: Test subtitle display (for supported formats)
-- **Dimensions**: Customize player width and height
-- **Ad Integration**: Built-in ad support (automatic when available)
+#### Late Join Policies
+- **Play Remaining**: Play the remaining portion of an ad if joining mid-break
+- **Skip to Content**: Skip directly to content when joining during an ad
 
-### Event Callbacks
+### 📋 Sample Streams
 
-The following player events are logged to the console:
+The test environment includes several pre-configured HLS streams:
 
-- `onReady`: Fired when the player is ready
-- `onStart`: Fired when playback starts
-- `onPlay`: Fired when the player begins playing
-- `fullscreenFunc`: Custom fullscreen handler
-- `volumeFunc`: Custom volume handler
-- `controlFunc`: Custom control handler
+1. **Big Buck Bunny**: High-quality test stream
+2. **Sintel Trailer**: Alternative test content
+3. **Tears of Steel**: Additional sample stream
+4. **Custom Stream**: Input your own HLS URL
+
+### 🎯 Sample VAST Tags
+
+Pre-configured ad tags for testing:
+
+1. **Google IMA Test Ad**: Standard IMA test advertisement
+2. **VAST 4.0 Sample**: Industry-standard VAST sample
+3. **Custom VAST**: Input your own VAST tag URL
+
+## Testing Scenarios
+
+### 🎪 Recommended Test Cases
+
+1. **Basic Playback**
+   - Test each sample stream
+   - Verify autoplay and mute functionality
+   - Test native vs hls.js playback
+
+2. **Ad Integration**
+   - Test pre-roll ads (0 second start time)
+   - Test mid-roll ads (various start times)
+   - Verify ad countdown and duration
+
+3. **SCTE-35 Testing**
+   - Use streams with embedded SCTE-35 markers
+   - Test automatic ad break detection
+   - Verify CUE-OUT/CUE-IN handling
+
+4. **Late Join Scenarios**
+   - Start playback during an ad break
+   - Test both late join policies
+   - Verify remaining ad duration calculation
+
+5. **Error Handling**
+   - Test invalid stream URLs
+   - Test invalid VAST tags
+   - Verify graceful fallback behavior
+
+### 🐛 Debugging Tips
+
+- **Event Log**: Monitor real-time player events
+- **Browser Console**: Check for additional error messages
+- **Network Tab**: Verify stream and ad requests
+- **Configuration Display**: Review current player settings
+
+## Configuration Reference
+
+### Player Config Options
+
+```javascript
+{
+  src: string,              // HLS stream URL
+  autoplay: boolean,        // Auto-start playback
+  muted: boolean,          // Start muted
+  controls: boolean,       // Show video controls
+  allowNativeHls: boolean, // Use native HLS when available
+  defaultVastTagUrl: string // Default VAST tag URL
+}
+```
+
+### Ad Schedule Structure
+
+```javascript
+{
+  lateJoinPolicy: 'play_remaining' | 'skip_to_content',
+  breaks: [
+    {
+      id: string,           // Unique identifier
+      startTimeMs: number,  // Start time in milliseconds
+      durationMs: number,   // Duration in milliseconds
+      vastTagUrl: string    // VAST tag URL for this break
+    }
+  ]
+}
+```
+
+## Troubleshooting
+
+### Common Issues
+
+1. **HTTPS Required**: The dev server uses HTTPS for testing autoplay functionality
+2. **CORS Issues**: Some streams may require CORS headers
+3. **Ad Blockers**: May interfere with VAST ad loading
+4. **Browser Compatibility**: Ensure modern browser with HLS support
+
+### Browser Requirements
+
+- Chrome 70+
+- Firefox 65+
+- Safari 12+
+- Edge 79+
 
 ## Development
 
 ### Project Structure
 
 ```
-showfer-player-tester/
-├── public/
-│   └── index.html          # HTML template
-├── src/
-│   ├── index.js           # React entry point
-│   └── App.js             # Main testing application
-├── package.json           # Dependencies and scripts
-├── webpack.config.js      # Webpack configuration
-├── .babelrc              # Babel configuration
-└── README.md             # This file
+src/
+├── App.js          # Main application component
+├── App.css         # Application styling
+└── index.js        # React application entry point
 ```
 
-### Dependencies
+### Customization
 
-- **React 18**: Latest React for the testing interface
-- **showfer-player**: The video player component being tested (linked locally)
-- **Webpack**: Build tool and development server
-- **Babel**: JavaScript transpiler for React/ES6+
+To add new sample streams or VAST tags, modify the arrays in `App.js`:
 
-### Scripts
+```javascript
+const SAMPLE_STREAMS = [
+  { name: 'Your Stream', url: 'https://example.com/stream.m3u8' }
+];
 
-- `npm start` / `npm run dev`: Start development server
-- `npm run build`: Build for production
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Player not loading**: Check that the video URL is valid and accessible
-2. **CORS errors**: Some video URLs may have CORS restrictions
-3. **HLS not working**: Ensure the browser supports HLS or that hls.js is available
-4. **Subtitles not showing**: Verify the subtitle URL points to a valid .vtt file
-
-### Browser Console
-
-Always check the browser console for:
-
-- Player events and status updates
-- Error messages
-- Network issues
-- CORS warnings
-
-## Testing Recommendations
-
-1. **Start with HLS**: Use the default HLS example URL first
-2. **Test Different Formats**: Try MP4, YouTube, and Twitch URLs
-3. **Verify Controls**: Test all control buttons (play/pause, volume, fullscreen)
-4. **Check Responsiveness**: Test different player dimensions
-5. **Test Edge Cases**: Try invalid URLs, network timeouts, etc.
-6. **Monitor Performance**: Check for memory leaks during long testing sessions
-
-## Contributing
-
-This is a testing utility for the showfer-player module. To contribute:
-
-1. Test new features or configurations
-2. Report any issues with the player
-3. Add new test cases or example URLs
-4. Improve the testing interface
+const SAMPLE_VAST_TAGS = [
+  { name: 'Your VAST', url: 'https://example.com/vast.xml' }
+];
+```
 
 ## License
 
-MIT - Same as the showfer-player module
+MIT License - see the main stormcloud-video-player package for details.
+
+## Support
+
+For issues with the stormcloud-video-player package itself, please refer to the main package documentation and support channels.
+
+For issues with this test environment, check the browser console for error messages and ensure all dependencies are properly installed.

@@ -37,12 +37,23 @@ module.exports = {
     }),
   ],
   devServer: {
-    static: path.join(__dirname, "dist"),
+    static: { directory: path.join(__dirname, "dist") },
     port: 3000,
     hot: true,
-    open: true,
+    open: false,
+    host: "localhost",
+    server: { type: "https" },
+    allowedHosts: "all",
   },
   resolve: {
     extensions: [".js", ".jsx"],
+    alias: {
+      react$: path.resolve(__dirname, "node_modules/react"),
+      "react-dom": path.resolve(__dirname, "node_modules/react-dom"),
+      "react-dom/client": require.resolve("react-dom/client"),
+      "react/jsx-runtime": require.resolve("react/jsx-runtime"),
+      "react/jsx-dev-runtime": require.resolve("react/jsx-dev-runtime"),
+    },
+    modules: [path.resolve(__dirname, "node_modules"), "node_modules"],
   },
 };
