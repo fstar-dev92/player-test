@@ -4,13 +4,13 @@ import "./App.css";
 
 function App() {
   const [config, setConfig] = useState({
-    src: "https://stream.adstorm.co/test/playlist.m3u8",
+    src: "https://hls.showfer.com/live/jFqzo/Test_Ad/clear.m3u8",
     autoplay: false,
     muted: false,
     controls: true,
     allowNativeHls: false,
     showCustomControls: true,
-    licenseKey: "ADSTORM-11D6D99FBF3F48B597F92099C5AA1EC9",
+    licenseKey: "KAGWTV-KEY-PLAYER-0910",
   });
 
   const [playerReady, setPlayerReady] = useState(false);
