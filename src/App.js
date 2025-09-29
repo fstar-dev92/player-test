@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
-import { StormcloudVideoPlayerComponent } from "stormcloud-video-player";
+import StormcloudPlayer from "stormcloud-video-player";
 import "./App.css";
 
 function App() {
   const [config, setConfig] = useState({
-    src: "https://hls.showfer.com/live/jFqzo/Test_Ad/clear.m3u8",
+    src: "https://stream.adstorm.co/test/playlist.m3u8",
     autoplay: false,
     muted: false,
     controls: true,
@@ -22,8 +22,9 @@ function App() {
   };
 
   const handlePlay = () => {
-    if (playerRef.current && playerRef.current.video) {
-      playerRef.current.video.play().catch((error) => {
+    if (playerRef.current && playerRef.current.videoElement) {
+      // Use the video element's play method from the StormcloudVideoPlayer instance
+      playerRef.current.videoElement.play().catch((error) => {
         console.error("Failed to play video:", error);
       });
     }
@@ -54,7 +55,7 @@ function App() {
             <div className="player-container">
               <h2>Video Player</h2>
               <div className="video-wrapper">
-                <StormcloudVideoPlayerComponent
+                <StormcloudPlayer
                   src={config.src}
                   autoplay={config.autoplay}
                   muted={config.muted}
@@ -63,6 +64,9 @@ function App() {
                   showCustomControls={config.showCustomControls}
                   licenseKey={config.licenseKey}
                   onReady={handlePlayerReady}
+                  onError={(error) => {
+                    console.error("Player error:", error);
+                  }}
                   style={{
                     width: "100%",
                     height: "auto",
