@@ -139,7 +139,8 @@ Pre-configured ad tags for testing:
   muted: boolean,          // Start muted
   controls: boolean,       // Show video controls
   allowNativeHls: boolean, // Use native HLS when available
-  defaultVastTagUrl: string // Default VAST tag URL
+  immediateManifestAds: boolean, // Load ads immediately from manifest
+  debugAdTiming: boolean   // Enable ad timing debug logs
 }
 ```
 

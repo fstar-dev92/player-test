@@ -1,29 +1,31 @@
-import React, { useState, useRef } from "react";
-import StormcloudPlayer from "stormcloud-video-player";
+import { useState, useRef } from "react";
+import StormcloudPlayer from "./components/player/StormcloudPlayerWrapper";
 import "./App.css";
 
 function App() {
   const [config, setConfig] = useState({
-    src: "https://hls.showfer.com/live/jFqzo/Test_Ad/clear.m3u8",
+    src: "https://stream.adstorm.co/test/playlist.m3u8",
     autoplay: false,
     muted: false,
     controls: true,
     allowNativeHls: false,
     showCustomControls: true,
     licenseKey: "KAGWTV-KEY-PLAYER-0910",
+    immediateManifestAds: false,
+    debugAdTiming: false,
   });
 
   const [playerReady, setPlayerReady] = useState(false);
   const playerRef = useRef(null);
 
   const handlePlayerReady = (player) => {
+    console.log("Player ready:", player);
     playerRef.current = player;
     setPlayerReady(true);
   };
 
   const handlePlay = () => {
     if (playerRef.current && playerRef.current.videoElement) {
-      // Use the video element's play method from the StormcloudVideoPlayer instance
       playerRef.current.videoElement.play().catch((error) => {
         console.error("Failed to play video:", error);
       });
@@ -36,7 +38,6 @@ function App() {
       [key]: value,
     }));
 
-    // Reset player ready state for critical props that require recreation
     const criticalProps = ["src", "licenseKey", "allowNativeHls"];
     if (criticalProps.includes(key)) {
       setPlayerReady(false);
@@ -56,6 +57,7 @@ function App() {
               <h2>Video Player</h2>
               <div className="video-wrapper">
                 <StormcloudPlayer
+                  key={`player-${config.src}-${config.licenseKey}`}
                   src={config.src}
                   autoplay={config.autoplay}
                   muted={config.muted}
@@ -63,10 +65,12 @@ function App() {
                   allowNativeHls={config.allowNativeHls}
                   showCustomControls={config.showCustomControls}
                   licenseKey={config.licenseKey}
+                  immediateManifestAds={config.immediateManifestAds}
+                  debugAdTiming={config.debugAdTiming}
                   onReady={handlePlayerReady}
-                  onError={(error) => {
-                    console.error("Player error:", error);
-                  }}
+                  onVolumeToggle={() => console.log("Volume toggled")}
+                  onFullscreenToggle={() => console.log("Fullscreen toggled")}
+                  onControlClick={() => console.log("Control clicked")}
                   style={{
                     width: "100%",
                     height: "auto",
@@ -93,13 +97,30 @@ function App() {
               <div className="config-form">
                 <div className="form-group">
                   <label htmlFor="src">Stream URL:</label>
-                  <input
-                    type="text"
-                    id="src"
-                    value={config.src}
-                    onChange={(e) => updateConfig("src", e.target.value)}
-                    placeholder="Enter stream URL"
-                  />
+                  <div style={{ display: "flex", gap: "8px" }}>
+                    <input
+                      type="text"
+                      id="src"
+                      value={config.src}
+                      onChange={(e) => updateConfig("src", e.target.value)}
+                      placeholder="Enter stream URL"
+                      style={{ flex: 1 }}
+                    />
+                    <button
+                      onClick={() => updateConfig("src", "")}
+                      style={{
+                        padding: "8px 16px",
+                        backgroundColor: "#6b7280",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "14px",
+                      }}
+                    >
+                      Clear
+                    </button>
+                  </div>
                 </div>
 
                 <div className="form-group">
@@ -176,6 +197,32 @@ function App() {
                   </label>
                 </div>
 
+                <div className="form-group checkbox-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={config.immediateManifestAds}
+                      onChange={(e) =>
+                        updateConfig("immediateManifestAds", e.target.checked)
+                      }
+                    />
+                    <span className="checkbox-label">Immediate Manifest Ads</span>
+                  </label>
+                </div>
+
+                <div className="form-group checkbox-group">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={config.debugAdTiming}
+                      onChange={(e) =>
+                        updateConfig("debugAdTiming", e.target.checked)
+                      }
+                    />
+                    <span className="checkbox-label">Debug Ad Timing</span>
+                  </label>
+                </div>
+
                 <div className="form-group">
                   <button
                     className="play-button"
@@ -211,6 +258,14 @@ function App() {
                     <div>
                       <strong>License:</strong>{" "}
                       {config.licenseKey ? "Set" : "Not set"}
+                    </div>
+                    <div>
+                      <strong>Immediate Ads:</strong>{" "}
+                      {config.immediateManifestAds ? "Yes" : "No"}
+                    </div>
+                    <div>
+                      <strong>Debug Ad Timing:</strong>{" "}
+                      {config.debugAdTiming ? "Yes" : "No"}
                     </div>
                   </div>
                 </div>

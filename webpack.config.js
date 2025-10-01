@@ -1,5 +1,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   entry: "./src/index.js",
@@ -16,7 +17,10 @@ module.exports = {
         use: {
           loader: "babel-loader",
           options: {
-            presets: ["@babel/preset-env", "@babel/preset-react"],
+            presets: [
+              "@babel/preset-env",
+              ["@babel/preset-react", { runtime: "automatic" }],
+            ],
           },
         },
       },
@@ -34,6 +38,11 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: "./public/index.html",
       title: "Showfer Player Tester",
+    }),
+    new webpack.DefinePlugin({
+      'process.env.REACT_APP_PLAYER_LICENSE_KEY': JSON.stringify(
+        process.env.REACT_APP_PLAYER_LICENSE_KEY
+      ),
     }),
   ],
   devServer: {
