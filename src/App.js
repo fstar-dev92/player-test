@@ -12,7 +12,7 @@ function App() {
     showCustomControls: true,
     licenseKey: "SONIFI-TEST-KEY-8A7B6BE006E748049FD96BE532479BE0",
     immediateManifestAds: false,
-    debugAdTiming: false,
+    debugAdTiming: true,
   });
 
   const [playerReady, setPlayerReady] = useState(false);
