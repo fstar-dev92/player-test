@@ -4,13 +4,13 @@ import "./App.css";
 
 function App() {
   const [config, setConfig] = useState({
-    src: "https://stream.adstorm.co/test/playlist.m3u8",
+    src: "https://thegateway.app/BizAndYou/Biz_720p/playlist.m3u8",
     autoplay: false,
     muted: false,
     controls: true,
     allowNativeHls: false,
     showCustomControls: true,
-    licenseKey: "SONIFI-TEST-KEY-8A7B6BE006E748049FD96BE532479BE0",
+    licenseKey: "red5pro-key",
     immediateManifestAds: false,
     debugAdTiming: true,
   });
