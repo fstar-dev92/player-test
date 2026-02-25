@@ -247,6 +247,67 @@ body {
   font-size: 16px;
 }
 
+/* Ad Player Preset Buttons */
+.preset-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-preset {
+  background: rgba(100, 116, 139, 0.2);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  border-radius: 6px;
+  padding: 8px 14px;
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-preset:hover {
+  background: rgba(100, 116, 139, 0.4);
+  border-color: rgba(100, 116, 139, 0.5);
+}
+
+.btn-preset.active {
+  background: rgba(20, 184, 166, 0.2);
+  border-color: #14b8a6;
+  color: #14b8a6;
+  box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.2);
+}
+
+/* Prebid Info */
+.prebid-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(251, 146, 60, 0.08);
+  border: 1px solid rgba(251, 146, 60, 0.2);
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.prebid-badge {
+  background: rgba(251, 146, 60, 0.2);
+  color: #fb923c;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.prebid-detail {
+  color: #94a3b8;
+  font-size: 12px;
+}
+
 /* Toggle Switches */
 .control-card.toggles {
   display: flex;

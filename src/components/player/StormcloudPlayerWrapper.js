@@ -240,6 +240,7 @@ const StormcloudPlayerWrapper = (props) => {
       vastMode,
       vastTagUrl,
       adPlayerType,
+      prebid,
       style,
       className,
       // Exclude callback props - we'll use our wrapped versions
@@ -262,6 +263,7 @@ const StormcloudPlayerWrapper = (props) => {
       vastMode,
       vastTagUrl,
       adPlayerType,
+      prebid,
       style,
       className,
       onVolumeToggle: handleVolumeToggle,

@@ -2,17 +2,73 @@ import { useState, useRef } from "react";
 import StormcloudPlayer from "./components/player/StormcloudPlayerWrapper";
 import "./App.css";
 
+const PREBID_INMOBI_CONFIG = {
+  enabled: true,
+  debug: true,
+  ortbRequest: {
+    id: "multi-bidder-request",
+    site: {
+      page: "https://adstorm.co",
+      domain: "adstorm.co",
+    },
+    device: {
+      devicetype: 1,
+    },
+    imp: [
+      {
+        id: "imp-interstitial",
+        instl: 1,
+        video: {
+          w: 640,
+          h: 480,
+          mimes: ["video/mp4"],
+          placement: 3,
+          protocols: [2, 3, 5, 6],
+        },
+        ext: {
+          prebid: {
+            bidder: {
+              inmobi: {
+                plc: "10000614036",
+              },
+            },
+          },
+        },
+      },
+    ],
+    tmax: 3000,
+    ext: {
+      prebid: {
+        debug: true,
+        server: {
+          externalurl: "https://sspproxy.adstorm.co",
+          gvlid: 15,
+          datacenter: "us-east",
+        },
+      },
+    },
+  },
+};
+
+const AD_PLAYER_PRESETS = [
+  { label: "HLS (default)", value: "hls", prebid: null },
+  { label: "Google IMA", value: "ima", prebid: null },
+  { label: "Prebid - InMobi", value: "prebid", prebid: PREBID_INMOBI_CONFIG },
+];
+
 function App() {
   const [config, setConfig] = useState({
-    src: "https://thegateway.app/BizAndYou/Biz_720p/playlist.m3u8",
+    src: "https://hls.showfer.com/live/WRHqv/Pac12_Sample/pac12-sample.m3u8",
     autoplay: false,
     muted: false,
     controls: true,
     allowNativeHls: false,
     showCustomControls: true,
-    licenseKey: "red5pro-key",
+    licenseKey: "TRAFFIQ-20C74492F39A4F7A883C97743FC94F81",
     immediateManifestAds: false,
     debugAdTiming: true,
+    adPlayerType: "prebid",
+    prebid: PREBID_INMOBI_CONFIG,
   });
 
   const [playerReady, setPlayerReady] = useState(false);
@@ -38,11 +94,22 @@ function App() {
       [key]: value,
     }));
 
-    const criticalProps = ["src", "licenseKey", "allowNativeHls"];
+    const criticalProps = ["src", "licenseKey", "allowNativeHls", "adPlayerType"];
     if (criticalProps.includes(key)) {
       setPlayerReady(false);
     }
   };
+
+  const handleAdPlayerPreset = (preset) => {
+    setConfig((prev) => ({
+      ...prev,
+      adPlayerType: preset.value,
+      prebid: preset.prebid || undefined,
+    }));
+    setPlayerReady(false);
+  };
+
+  const activePreset = AD_PLAYER_PRESETS.find((p) => p.value === config.adPlayerType);
 
   return (
     <div className="app">
@@ -58,7 +125,7 @@ function App() {
         <div className="content">
           <div className="player-wrapper">
             <StormcloudPlayer
-              key={`player-${config.src}-${config.licenseKey}`}
+              key={`player-${config.src}-${config.licenseKey}-${config.adPlayerType}`}
               src={config.src}
               autoplay={config.autoplay}
               muted={config.muted}
@@ -68,6 +135,8 @@ function App() {
               licenseKey={config.licenseKey}
               immediateManifestAds={config.immediateManifestAds}
               debugAdTiming={config.debugAdTiming}
+              adPlayerType={config.adPlayerType}
+              prebid={config.prebid}
               onReady={handlePlayerReady}
               onVolumeToggle={() => console.log("Volume toggled")}
               onFullscreenToggle={() => console.log("Fullscreen toggled")}
@@ -108,6 +177,29 @@ function App() {
                 onChange={(e) => updateConfig("licenseKey", e.target.value)}
                 placeholder="Enter license key"
               />
+            </div>
+
+            <div className="control-card">
+              <label className="control-label">Ad Player Type</label>
+              <div className="preset-buttons">
+                {AD_PLAYER_PRESETS.map((preset) => (
+                  <button
+                    key={preset.value}
+                    className={`btn-preset ${config.adPlayerType === preset.value ? "active" : ""}`}
+                    onClick={() => handleAdPlayerPreset(preset)}
+                  >
+                    {preset.label}
+                  </button>
+                ))}
+              </div>
+              {config.adPlayerType === "prebid" && (
+                <div className="prebid-info">
+                  <span className="prebid-badge">Prebid Server</span>
+                  <span className="prebid-detail">
+                    InMobi (plc: 10000620785) via sspproxy.adstorm.co
+                  </span>
+                </div>
+              )}
             </div>
 
             <div className="control-card toggles">
