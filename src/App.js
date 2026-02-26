@@ -2,58 +2,10 @@ import { useState, useRef } from "react";
 import StormcloudPlayer from "./components/player/StormcloudPlayerWrapper";
 import "./App.css";
 
-const PREBID_INMOBI_CONFIG = {
-  enabled: true,
-  debug: true,
-  ortbRequest: {
-    id: "multi-bidder-request",
-    site: {
-      page: "https://adstorm.co",
-      domain: "adstorm.co",
-    },
-    device: {
-      devicetype: 1,
-    },
-    imp: [
-      {
-        id: "imp-interstitial",
-        instl: 1,
-        video: {
-          w: 640,
-          h: 480,
-          mimes: ["video/mp4"],
-          placement: 3,
-          protocols: [2, 3, 5, 6],
-        },
-        ext: {
-          prebid: {
-            bidder: {
-              inmobi: {
-                plc: "10000614036",
-              },
-            },
-          },
-        },
-      },
-    ],
-    tmax: 3000,
-    ext: {
-      prebid: {
-        debug: true,
-        server: {
-          externalurl: "https://sspproxy.adstorm.co",
-          gvlid: 15,
-          datacenter: "us-east",
-        },
-      },
-    },
-  },
-};
-
 const AD_PLAYER_PRESETS = [
-  { label: "HLS (default)", value: "hls", prebid: null },
-  { label: "Google IMA", value: "ima", prebid: null },
-  { label: "Prebid - InMobi", value: "prebid", prebid: PREBID_INMOBI_CONFIG },
+  { label: "HLS (default)", value: "hls" },
+  { label: "Google IMA", value: "ima" },
+  { label: "Prebid (AdStorm)", value: "prebid" },
 ];
 
 function App() {
@@ -68,7 +20,6 @@ function App() {
     immediateManifestAds: false,
     debugAdTiming: true,
     adPlayerType: "prebid",
-    prebid: PREBID_INMOBI_CONFIG,
   });
 
   const [playerReady, setPlayerReady] = useState(false);
@@ -104,7 +55,6 @@ function App() {
     setConfig((prev) => ({
       ...prev,
       adPlayerType: preset.value,
-      prebid: preset.prebid || undefined,
     }));
     setPlayerReady(false);
   };
@@ -136,7 +86,6 @@ function App() {
               immediateManifestAds={config.immediateManifestAds}
               debugAdTiming={config.debugAdTiming}
               adPlayerType={config.adPlayerType}
-              prebid={config.prebid}
               onReady={handlePlayerReady}
               onVolumeToggle={() => console.log("Volume toggled")}
               onFullscreenToggle={() => console.log("Fullscreen toggled")}
@@ -194,9 +143,9 @@ function App() {
               </div>
               {config.adPlayerType === "prebid" && (
                 <div className="prebid-info">
-                  <span className="prebid-badge">Prebid Server</span>
+                  <span className="prebid-badge">Prebid (AdStorm)</span>
                   <span className="prebid-detail">
-                    InMobi (plc: 10000620785) via sspproxy.adstorm.co
+                    sspproxy.adstorm.co/openrtb2/auction/adstorm
                   </span>
                 </div>
               )}
